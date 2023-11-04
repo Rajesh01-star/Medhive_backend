@@ -2,10 +2,12 @@ import express from "express";
 import cors from "cors";
 
 import { connectDB } from "./database/connectDb.mjs";
-import { Hospital } from "./database/model.mjs";
 import { fetchHospitals } from "./utils/fetchHospitals.mjs";
 import { fetchNews } from "./utils/fetchNews.mjs";
 import { fetchIndividualHospital } from "./utils/fetchIndividualHospital.mjs";
+import { Hospital } from "./database/model.mjs";
+import { SearchedHospital } from "./database/SearchedHospitalModel.mjs";
+import { fetchSearchedHospitals } from "./utils/fetchSearchedHospitals.mjs";
 
 const app = express();
 const port = process.env.PORT || 4000; // Use the cors middleware
@@ -46,6 +48,35 @@ app.get("/News", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// app.get("/createSearchHospitalsCollection", async (req, res) => {
+//   try {
+
+//     // Assuming "hospitalsArr" contains the data you want to save
+//     const hospitalsToSave = hospitalsArr;
+
+//     // Use the SearchHospitals model to insert the data into your database
+//     const savedHospitals = await SearchedHospital.insertMany(hospitalsToSave);
+
+//     res.status(200).json({ message: "searchHospitals collection created and data saved successfully", data: savedHospitals });
+//   } catch (err) {
+//     res.status(500).json({ error: "Internal Server Error" });
+//     console.log(err);
+//   }
+// });
+
+app.get("/getSearchHospitals", async (req, res) => {
+  try {
+    const searchedHospitals = await fetchSearchedHospitals();
+    const hospitalNames = searchedHospitals.map(hospital => hospital.HospitalName); 
+    console.log(hospitalNames);
+    res.status(200).json(hospitalNames); 
+  } catch (err) {
+    res.status(500).json({ error: "Internal Server Error" });
+    console.log(err);
+  }
+});
+
 
 // Start the server
 app.listen(port, () => {
