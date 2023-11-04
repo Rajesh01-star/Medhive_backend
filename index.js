@@ -67,10 +67,11 @@ app.get("/News", async (req, res) => {
 
 app.get("/getSearchHospitals", async (req, res) => {
   try {
-    const searchedHospitals = await fetchSearchedHospitals();
-    const hospitalNames = searchedHospitals.map(hospital => hospital.HospitalName); 
-    console.log(hospitalNames);
-    res.status(200).json(hospitalNames); 
+    const initials = req.query.initials; // Get initials from the request
+    const searchedHospitals = await fetchSearchedHospitals(initials);
+    const matchingHospitalNames = searchedHospitals.map(hospital => hospital.HospitalName);
+    console.log(matchingHospitalNames);
+    res.status(200).json(matchingHospitalNames);
   } catch (err) {
     res.status(500).json({ error: "Internal Server Error" });
     console.log(err);
