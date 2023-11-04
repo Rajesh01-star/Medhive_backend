@@ -3,10 +3,11 @@ import { connectDB } from "../database/connectDb.mjs";
 // Connect to MongoDB
 connectDB();
 
-const fetchSearchedHospitals = async function () {
+const fetchSearchedHospitals = async function (initials) {
   try {
-    const SearchedHospitals = await SearchedHospital.find();
-    return SearchedHospitals;  
+    // Use initials to filter hospitals that match the provided initials
+    const SearchedHospitals = await SearchedHospital.find({ HospitalName: { $regex: `^${initials}`, $options: 'i' } });
+    return SearchedHospitals;
   } catch (error) {
     return error;
   }
