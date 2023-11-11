@@ -49,6 +49,7 @@ app.get("/News", async (req, res) => {
   }
 });
 
+
 // app.get("/createSearchHospitalsCollection", async (req, res) => {
 //   try {
 
@@ -68,15 +69,29 @@ app.get("/News", async (req, res) => {
 app.get("/getSearchHospitals", async (req, res) => {
   try {
     const initials = req.query.initials; // Get initials from the request
+    console.log(initials);
     const searchedHospitals = await fetchSearchedHospitals(initials);
-    const matchingHospitalNames = searchedHospitals.map(hospital => hospital.HospitalName);
-    console.log(matchingHospitalNames);
-    res.status(200).json(matchingHospitalNames);
+    // const matchingHospitalNames = searchedHospitals.map(hospital => hospital.HospitalName);
+    console.log(searchedHospitals);
+    res.status(200).json(searchedHospitals);
   } catch (err) {
     res.status(500).json({ error: "Internal Server Error" });
     console.log(err);
   }
 });
+
+app.get("/form_details",async(req,res)=>{
+  try{
+    const ID = req.query.ID;
+    const response = await fetchIndividualHospital(ID);
+    console.log(ID);
+    console.log(response);
+    res.status(200);
+  }catch(err){
+    res.status(500).json({ error: "Internal Server Error" });
+    console.log(err);
+  }
+})
 
 
 // Start the server
