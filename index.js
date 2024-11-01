@@ -43,6 +43,7 @@ app.get("/News", async (req, res) => {
   try {
     const response = await fetchNews();
     res.setHeader("Content-Type", "application/json");
+    console.log(response);
     res.send(JSON.stringify(response));
   } catch (err) {
     res.status(500).json({ error: "Internal Server Error" });
